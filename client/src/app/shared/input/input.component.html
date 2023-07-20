@@ -1,0 +1,56 @@
+<mdb-form-control *ngIf="inputType !== 'textarea'">
+  <input
+    [formControl]="control"
+    class="form-control"
+    id={{label}}
+    mdbInput
+    mdbValidate
+    style="color: #F4EEE0"
+    type={{inputType}}
+  />
+
+  <label style="color: #D5CEA3" class="form-label" for={{label}} mdbLabel>{{label}}</label>
+  <mdb-error *ngIf="control.errors?.['required'] && (control?.dirty || control?.touched)">
+    {{label}} is required
+  </mdb-error>
+
+  <mdb-error *ngIf="control.errors?.['minlength'] && (control?.dirty || control?.touched)">
+    {{label}} must be at least {{control.errors?.['minlength'].requiredLength}} characters
+  </mdb-error>
+
+  <mdb-error *ngIf="control.errors?.['maxlength'] && (control?.dirty || control?.touched)">
+    {{label}} can be at most {{control.errors?.['maxlength'].requiredLength}} characters
+  </mdb-error>
+
+  <mdb-error *ngIf="control.errors?.['min'] && (control?.dirty || control?.touched)">
+    {{label}} must be at least {{control.errors?.['min'].min}}
+  </mdb-error>
+
+  <mdb-error *ngIf="control.errors?.['notMatching'] && (control?.dirty || control?.touched)">
+    Passwords do not match
+  </mdb-error>
+
+  <mdb-error *ngIf="control.errors?.['categoryNameTaken'] && (control?.dirty || control?.touched)">
+    Category Name is already in use
+  </mdb-error>
+
+</mdb-form-control>
+
+<mdb-form-control *ngIf="inputType === 'textarea'">
+  <textarea [formControl]="control" class="form-control" id="{{label}}" mdbInput mdbValidate rows="4"
+            style="min-height: 12rem;"></textarea>
+  <label class="form-label" for={{label}} mdbLabel>{{label}}</label>
+  <mdb-error *ngIf="control.errors?.['required'] && (control?.dirty || control?.touched)">
+    {{label}} is required
+  </mdb-error>
+
+  <mdb-error *ngIf="control.errors?.['minlength'] && (control?.dirty || control?.touched)">
+    {{label}} must be at least {{control.errors?.['minlength'].requiredLength}} characters
+  </mdb-error>
+
+  <mdb-error *ngIf="control.errors?.['maxlength'] && (control?.dirty || control?.touched)">
+    {{label}} can be at most {{control.errors?.['maxlength'].requiredLength}} characters
+  </mdb-error>
+</mdb-form-control>
+
+

@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="d-flex justify-content-center align-items-center" style="height: 100vh">
+    <div class="text-center">
+      <h1 class="display-5"> User Login </h1>
+      <hr class="hr">
+
+      <div class="text-center" style="width: 25rem">
+        <div class="mb-4">
+          <app-input [formControl]="$any(loginForm.controls['userName'])" inputType="text"
+                     label="Username"></app-input>
+        </div>
+
+        <app-input [formControl]="$any(loginForm.controls['password'])" inputType="password"
+                   label="Password"></app-input>
+
+
+        <button (click)="login()" type="submit" class="btn btn-dark btn-block dark-3 my-4 mb-5">
+          Submit
+        </button>
+        <div *ngIf="loading" class="loader"></div>
+
+
+        <h5 class="fw-normal">Don't have an account?</h5>
+        <button
+          type="button"
+          class="btn btn-dark dark-3"
+          mdbRipple
+          rippleColor="dark"
+          routerLink="../register"
+        >
+          Register
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+

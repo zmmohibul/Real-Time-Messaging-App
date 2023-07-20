@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="d-flex justify-content-center align-items-center" style="height: 100vh">
+    <div class="text-center">
+      <h1 class="display-5"> Create New Account </h1>
+      <hr class="hr">
+
+      <div class="text-center">
+        <div class="mb-4">
+          <app-input [formControl]="$any(registerForm.controls['userName'])" inputType="text"
+                     label="Username"></app-input>
+        </div>
+
+        <div class="mb-4">
+          <app-input [formControl]="$any(registerForm.controls['password'])" inputType="password"
+                     label="Password"></app-input>
+        </div>
+
+        <app-input [formControl]="$any(registerForm.controls['confirmPassword'])" inputType="password"
+                   label="Confirm Password"></app-input>
+
+
+        <button (click)="register()" type="submit" class="btn btn-dark btn-block dark-3 my-4 mb-5">
+          Submit
+        </button>
+        <div *ngIf="loading" class="loader"></div>
+
+
+        <h5 class="fw-normal">Already have an account?</h5>
+        <button
+          type="button"
+          class="btn btn-dark dark-3"
+          mdbRipple
+          rippleColor="dark"
+          routerLink="../login"
+        >
+          Login
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
