@@ -10,6 +10,11 @@ const routes: Routes = [
         (module) => module.AuthenticationModule
       ),
   },
+  {
+    path: 'messages',
+    loadChildren: () =>
+      import('./message/message.module').then((module) => module.MessageModule),
+  },
   { path: '**', component: NotFoundComponent, pathMatch: 'full' },
 ];
 

@@ -4,7 +4,7 @@ import { LoginModel } from '../../models/authentication/loginModel';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { User } from '../../models/authentication/user';
+import { User } from '../../models/user/user';
 
 @Component({
   selector: 'app-register',

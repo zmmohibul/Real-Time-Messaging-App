@@ -1,4 +1,6 @@
 using API.Dtos;
+using API.Dtos.Authentication;
+using API.Dtos.User;
 using API.Helpers;
 
 namespace API.Interfaces;

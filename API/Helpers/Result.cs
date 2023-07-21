@@ -2,7 +2,7 @@ using API.Errors;
 
 namespace API.Helpers;
 
-public class Result<T>
+public class Result<T> 
 {
     public bool IsSuccess { get; set; }
     public T? Data { get; set; }

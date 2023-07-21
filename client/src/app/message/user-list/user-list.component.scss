@@ -1,0 +1,15 @@
+li {
+  cursor: pointer;
+}
+
+li:hover {
+  opacity: .6;
+  transition: all .1s ease-in;
+}
+
+.online {
+  width: 5px;
+  height: 5px;
+  background-color: green;
+  color: green;
+}

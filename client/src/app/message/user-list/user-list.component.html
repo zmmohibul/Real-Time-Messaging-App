@@ -1,0 +1,42 @@
+<ul class="list-group list-group-light">
+  <li *ngFor="let user of users"
+      class="list-group-item d-flex justify-content-between align-items-center dark-3 border "
+      style="background-color: #393053;">
+    <div class="d-flex align-items-center">
+      <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px"
+           class="rounded-circle"/>
+      <div class="ms-3">
+        <p class="fw-bold mb-0">Kate Hunington
+          <span class="badge  rounded-pill badge-notification bg-danger">12</span>
+          <span *ngIf="(presenceService.onlineUsers$ | async)?.includes(user.userName)"
+                class="mx-3 mb-1 badge rounded-pill badge-success">Online</span>
+          <span *ngIf="!(presenceService.onlineUsers$ | async)?.includes(user.userName)"
+                class="mx-3 mb-1 badge rounded-pill badge-info">Offline</span>
+        </p>
+        <p class="text-muted mb-0">{{ user.userName }}</p>
+      </div>
+    </div>
+    <!--    <span class="badge rounded-pill badge-success">Online</span>-->
+  </li>
+
+  <li class="list-group-item d-flex justify-content-between align-items-center dark-3 border"
+      style="background-color: #393053;">
+    <div class="d-flex align-items-center">
+      <img src="https://mdbootstrap.com/img/new/avatars/7.jpg" class="rounded-circle" alt=""
+           style="width: 45px; height: 45px"/>
+
+      <div class="ms-3">
+
+        <p class="fw-bold mb-0">Kate Hunington
+          <span class="badge  rounded-pill badge-notification bg-danger">12</span>
+          <span class="mx-3 mb-1 badge rounded-pill badge-success">Online</span>
+        </p>
+
+
+        <p class="text-muted mb-0">kate.hunington@gmail.com
+        </p>
+
+      </div>
+    </div>
+  </li>
+</ul>

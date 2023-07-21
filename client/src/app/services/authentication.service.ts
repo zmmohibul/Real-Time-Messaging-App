@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, map } from 'rxjs';
-import { User } from '../models/authentication/user';
+import { User } from '../models/user/user';
 import { HttpClient } from '@angular/common/http';
 import { LoginModel } from '../models/authentication/loginModel';
 import { RegisterModel } from '../models/authentication/registerModel';
+import { PresenceService } from './presence.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,10 @@ export class AuthenticationService {
   private currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private presenceService: PresenceService
+  ) {}
 
   login(model: LoginModel) {
     return this.http
@@ -44,8 +48,17 @@ export class AuthenticationService {
       );
   }
 
+  logOut() {
+    localStorage.removeItem('user');
+    this.currentUserSource.next(null);
+
+    this.presenceService.stopHubConnection();
+  }
+
   setCurrentUser(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
+
+    this.presenceService.createHubConnection(user);
   }
 }

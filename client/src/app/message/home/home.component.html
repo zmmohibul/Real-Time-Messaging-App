@@ -1,0 +1,17 @@
+<div class="">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="scroll">
+        <mdb-form-control class="form-white">
+          <input (input)="userSearchInput($event)" mdbInput type="text" id="formWhite" class="form-control"/>
+          <label mdbLabel class="form-label" for="formWhite">Search with UserName <i
+            class="mx-2 fas fa-search"></i></label>
+        </mdb-form-control>
+        <app-user-list [users]="users"></app-user-list>
+      </div>
+    </div>
+    <div class="col-md-8">
+      Messages
+    </div>
+  </div>
+</div>

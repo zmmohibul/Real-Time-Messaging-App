@@ -2,6 +2,7 @@ using API.Data;
 using API.Data.Repositories;
 using API.Interfaces;
 using API.Services;
+using API.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions;
@@ -21,6 +22,10 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ITokenService, TokenService>();
         
         services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddSignalR();
+        services.AddSingleton<PresenceTracker>();
 
         return services;
     }
