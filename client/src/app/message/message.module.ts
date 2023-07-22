@@ -5,9 +5,10 @@ import { MessageRoutingModule } from './message-routing.module';
 import { HomeComponent } from './home/home.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { SharedModule } from '../shared/shared.module';
+import { MessageThreadComponent } from './message-thread/message-thread.component';
 
 @NgModule({
-  declarations: [HomeComponent, UserListComponent],
+  declarations: [HomeComponent, UserListComponent, MessageThreadComponent],
   imports: [CommonModule, MessageRoutingModule, SharedModule],
 })
 export class MessageModule {}

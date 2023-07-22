@@ -23,6 +23,7 @@ public static class ApplicationServiceExtensions
         
         services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
 
         services.AddSignalR();
         services.AddSingleton<PresenceTracker>();

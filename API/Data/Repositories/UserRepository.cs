@@ -1,4 +1,5 @@
 using API.Dtos.User;
+using API.Entities;
 using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
@@ -35,18 +36,10 @@ public class UserRepository : IUserRepository
         return Result<PaginatedList<UserDetailsDto>>.OkResult(data);
     }
 
-    public async Task<Result<UserDetailsDto>> GetUserByUserNameAsync(string userName)
+    public async Task<AppUser> GetUserByUserNameAsync(string userName)
     {
-        var user = await _dataContext.Users
-            .AsNoTracking()
-            .SingleOrDefaultAsync(user => user.UserName.Equals(userName));
-
-        if (user == null)
-        {
-            return Result<UserDetailsDto>.NotFoundResult($"User {userName} not found");
-        }
-        
-        return Result<UserDetailsDto>.OkResult(_mapper.Map<UserDetailsDto>(user));
+        return await _dataContext.Users
+            .SingleOrDefaultAsync(user => user.UserName.Equals(userName.ToLower()));
     }
 
     public async Task<Result<UserDetailsDto>> UpdateUserAsync(string userName, UpdateUserDto updateUserDto)

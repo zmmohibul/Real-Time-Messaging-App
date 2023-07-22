@@ -1,6 +1,7 @@
 using API.Dtos.User;
 using API.Helpers;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -8,10 +9,12 @@ namespace API.Controllers;
 public class UsersController : BaseApiController
 {
     private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-    public UsersController(IUserRepository userRepository)
+    public UsersController(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,7 +26,9 @@ public class UsersController : BaseApiController
     [HttpGet("{username}")]
     public async Task<IActionResult> GetAllUsers(string username)
     {
-        return HandleResult(await _userRepository.GetUserByUserNameAsync(username));
+        var user = await _userRepository.GetUserByUserNameAsync(username);
+        
+        return Ok(_mapper.Map<UserDetailsDto>(user));
     }
     
     [HttpPut("{username}")]
