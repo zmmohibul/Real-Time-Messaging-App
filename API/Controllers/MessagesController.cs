@@ -31,35 +31,29 @@ public class MessagesController : ControllerBase
     [HttpGet("thread/{userName}")]
     public async Task<IActionResult> GetMessageThread(string userName)
     {
-        return Ok(await _messageRepository.GetMessageThreadAsync(User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+        return Ok(await _messageRepository.GetMessageThreadAsync(User.FindFirst(ClaimTypes.Name)?.Value,
             userName));
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateMessage(CreateMessageDto createMessageDto)
     {
-        var sender = await _userRepository.GetUserByUserNameAsync(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var sender = await _userRepository.GetUserByUserNameAsync(User.FindFirst(ClaimTypes.Name)?.Value);
         
         var recipient = await _userRepository.GetUserByUserNameAsync(createMessageDto.RecipientUserName);
         if (recipient == null)
         {
-            return NotFound(new Error() { StatusCode = 404, ErrorMessage = "Recipient user not found" });
+            return NotFound(new Error(404,"Recipient user not found"));
         }
 
-        var message = new Message()
-        {
-            Sender = sender,
-            Recipient = recipient,
-            MessageContent = createMessageDto.MessageContent,
-            MessageType = createMessageDto.MessageType,
-        };
-        
+        var message = new Message(sender, recipient, createMessageDto.MessageType, createMessageDto.MessageContent);
+
         if (await _messageRepository.CreateMessage(message))
         {
             return Ok(_mapper.Map<MessageDto>(message));
         }
 
-        return BadRequest(new Error() { StatusCode = 400, ErrorMessage = "Failed to send message" });
+        return BadRequest(new Error(400, "Failed to send message"));
     }
 
     [HttpDelete("{id}")]
@@ -68,15 +62,14 @@ public class MessagesController : ControllerBase
         var message = await _messageRepository.GetMessageById(id);
         if (message == null)
         {
-            return NotFound(new Error() { StatusCode = 404, ErrorMessage = "Already Deleted Message" });
+            return NotFound(new Error(404, "Already Deleted Message"));
         }
 
         var currentUser =
-            await _userRepository.GetUserByUserNameAsync(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            await _userRepository.GetUserByUserNameAsync(User.FindFirst(ClaimTypes.Name)?.Value);
         if (!message.Sender.UserName.Equals(currentUser.UserName))
         {
-            return BadRequest(new Error()
-                { StatusCode = 401, ErrorMessage = "You are not the sender of this message" });
+            return BadRequest(new Error(401, "You are not the sender of this message"));
         }
 
         if (await _messageRepository.DeleteMessageAsync(message))
@@ -84,6 +77,6 @@ public class MessagesController : ControllerBase
             return NoContent();
         }
 
-        return BadRequest(new Error() { StatusCode = 400, ErrorMessage = "Could not delete message" });
+        return BadRequest(new Error(400, "Could not delete message"));
     }
 }

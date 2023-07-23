@@ -1,3 +1,4 @@
+using API.Dtos.FriendRequest;
 using API.Dtos.Message;
 using API.Dtos.User;
 using API.Entities;
@@ -17,5 +18,7 @@ public class AutoMapperProfiles : Profile
                 opt => opt.MapFrom(src => src.Sender.UserName))
             .ForMember(dest => dest.RecipientUserName,
                 opt => opt.MapFrom(src => src.Recipient.UserName));
+
+        CreateMap<FriendRequest, FriendRequestDto>();
     }
 }

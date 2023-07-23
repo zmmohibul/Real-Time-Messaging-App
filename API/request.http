@@ -1,0 +1,29 @@
+# Authentication
+# Mohib Token eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJtb2hpYiIsIm5iZiI6MTY5MDA1MzkzOCwiZXhwIjoxNjkwNjU4NzM4LCJpYXQiOjE2OTAwNTM5Mzh9.IkfSxLz6sp2ySVKJO4G_MM1XKu2F7Eed1sPi_Bt1QtgRHwZplfbtMp9f3OMs7MMfN8Up-S5BqOJwK3lQdRFeVA
+# Zahin Token eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwidW5pcXVlX25hbWUiOiJ6YWhpbiIsIm5iZiI6MTY5MDA1Mzk3MSwiZXhwIjoxNjkwNjU4NzcxLCJpYXQiOjE2OTAwNTM5NzF9.XU-Q3SUb6KMB00sRwor2oaXTH_jTYwi2LqSAFGXDEVUWvcATx1mD1ZadnNu4LDsu67D0k3Ipv-R6LLrrGaNBWQ
+POST http://localhost:5168/api/authentication/register
+Content-Type: application/json
+
+{
+    "userName": "zahin",
+    "password": "Pa$$w0rd"
+}
+
+###
+
+POST http://localhost:5168/api/authentication/login
+Content-Type: application/json
+
+{
+    "userName": "zahin",
+    "password": "Pa$$w0rd"
+}
+
+
+###
+
+# Users
+GET http://localhost:5168/api/users
+
+###
+

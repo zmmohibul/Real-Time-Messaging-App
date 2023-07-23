@@ -30,6 +30,7 @@ public class MessageRepository : IMessageRepository
     public async Task<MessageDto> GetMessageDtoById(int id)
     {
         return await _dataContext.Messages
+            .AsNoTracking()
             .Include(u => u.Sender)
             .Include(u => u.Recipient)
             .ProjectTo<MessageDto>(_mapper.ConfigurationProvider)

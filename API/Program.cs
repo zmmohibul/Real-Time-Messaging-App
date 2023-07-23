@@ -34,5 +34,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<EventHub>("hubs/event");
 
 app.Run();

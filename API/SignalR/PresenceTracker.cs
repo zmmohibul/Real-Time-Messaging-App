@@ -53,7 +53,19 @@ public class PresenceTracker
         {
             onlineUsers = OnlineUsers.Keys.ToArray();
         }
-
+    
         return onlineUsers;
+    }
+
+    public static HashSet<string> GetConnectionsForUser(string username)
+    {
+        HashSet<string> connectionIds;
+
+        lock (OnlineUsers)
+        {
+            connectionIds = OnlineUsers.GetValueOrDefault(username);
+        }
+
+        return connectionIds;
     }
 }

@@ -50,6 +50,10 @@ export class PresenceService {
     this.hubConnection.on('GetOnlineUsers', (usernames) => {
       this.onlineUsersSource.next(usernames);
     });
+
+    this.hubConnection.on('NewFriendRequest', (requestFrom) => {
+      this.toastr.info(requestFrom.userName + ' sent you a friend request');
+    });
   }
 
   stopHubConnection() {

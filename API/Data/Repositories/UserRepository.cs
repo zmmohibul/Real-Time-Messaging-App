@@ -42,6 +42,11 @@ public class UserRepository : IUserRepository
             .SingleOrDefaultAsync(user => user.UserName.Equals(userName.ToLower()));
     }
 
+    public async Task<AppUser> GetUserByUserIdAsync(int userId)
+    {
+        return await _dataContext.Users.FindAsync(userId);
+    }
+
     public async Task<Result<UserDetailsDto>> UpdateUserAsync(string userName, UpdateUserDto updateUserDto)
     {
         var user = await _dataContext.Users
