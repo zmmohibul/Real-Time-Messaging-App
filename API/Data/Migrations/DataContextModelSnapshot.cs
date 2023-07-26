@@ -47,6 +47,32 @@ namespace API.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("API.Entities.Friend", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("FriendOneId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FriendTwoId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("FriendsSince")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FriendOneId");
+
+                    b.HasIndex("FriendTwoId");
+
+                    b.ToTable("Friends");
+                });
+
             modelBuilder.Entity("API.Entities.FriendRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -110,19 +136,23 @@ namespace API.Data.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("AppUserAppUser", b =>
+            modelBuilder.Entity("API.Entities.Friend", b =>
                 {
-                    b.Property<int>("FriendOfUsersId")
-                        .HasColumnType("integer");
+                    b.HasOne("API.Entities.AppUser", "FriendOne")
+                        .WithMany()
+                        .HasForeignKey("FriendOneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("FriendsId")
-                        .HasColumnType("integer");
+                    b.HasOne("API.Entities.AppUser", "FriendTwo")
+                        .WithMany()
+                        .HasForeignKey("FriendTwoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasKey("FriendOfUsersId", "FriendsId");
+                    b.Navigation("FriendOne");
 
-                    b.HasIndex("FriendsId");
-
-                    b.ToTable("AppUserAppUser");
+                    b.Navigation("FriendTwo");
                 });
 
             modelBuilder.Entity("API.Entities.FriendRequest", b =>
@@ -161,21 +191,6 @@ namespace API.Data.Migrations
                     b.Navigation("Recipient");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("AppUserAppUser", b =>
-                {
-                    b.HasOne("API.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("FriendOfUsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("FriendsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("API.Entities.AppUser", b =>

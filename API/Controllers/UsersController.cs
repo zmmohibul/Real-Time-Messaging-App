@@ -1,4 +1,5 @@
 using API.Dtos.User;
+using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
@@ -20,11 +21,11 @@ public class UsersController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetAllUsers([FromQuery] QueryParameters queryParameters)
     {
-        return HandleResult(await _userRepository.GetAllUsersAsync(queryParameters));
+        return HandleResult(await _userRepository.GetAllUsersWhoAreNotFriendOfCurrentUserAsync(User.GetUserId(), queryParameters));
     }
     
     [HttpGet("{username}")]
-    public async Task<IActionResult> GetAllUsers(string username)
+    public async Task<IActionResult> GetUserByUserName(string username)
     {
         var user = await _userRepository.GetUserByUserNameAsync(username);
         

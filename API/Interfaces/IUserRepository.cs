@@ -9,6 +9,7 @@ namespace API.Interfaces;
 public interface IUserRepository
 {
     Task<Result<PaginatedList<UserDetailsDto>>> GetAllUsersAsync(QueryParameters queryParameters);
+    Task<Result<PaginatedList<UserDetailsDto>>> GetAllUsersWhoAreNotFriendOfCurrentUserAsync(int currUserId, QueryParameters queryParameters);
     Task<AppUser> GetUserByUserNameAsync(string userName);
     Task<AppUser> GetUserByUserIdAsync(int userId);
     Task<Result<UserDetailsDto>> UpdateUserAsync(string userName, UpdateUserDto updateUserDto);

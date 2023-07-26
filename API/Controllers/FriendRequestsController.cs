@@ -21,13 +21,21 @@ public class FriendRequestsController : ControllerBase
 {
     private readonly IFriendRequestRepository _friendRequestRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IFriendRepository _friendRepository;
     private readonly IMapper _mapper;
-    private readonly IHubContext<PresenceHub> _eventHub;
+    private readonly IHubContext<EventHub> _eventHub;
 
-    public FriendRequestsController(IFriendRequestRepository friendRequestRepository, IUserRepository userRepository, IMapper mapper, IHubContext<PresenceHub> eventHub)
+    public FriendRequestsController(
+        IFriendRequestRepository friendRequestRepository,
+        IUserRepository userRepository,
+        IFriendRepository friendRepository,
+        IMapper mapper,
+        IHubContext<EventHub> eventHub
+        )
     {
         _friendRequestRepository = friendRequestRepository;
         _userRepository = userRepository;
+        _friendRepository = friendRepository;
         _mapper = mapper;
         _eventHub = eventHub;
     }
@@ -54,6 +62,11 @@ public class FriendRequestsController : ControllerBase
             return BadRequest(new Error(400, "You cannot send request to yourself"));
         }
 
+        if (await _friendRepository.AreFriends(requestFrom.Id, requestTo.Id))
+        {
+            return BadRequest(new Error(400, "You are already friends with this user"));
+        }
+
         if (await _friendRequestRepository.RequestExist(requestFrom.Id, requestTo.Id))
         {
             return BadRequest(new Error(400, "You have already sent a request to this user"));
@@ -69,10 +82,10 @@ public class FriendRequestsController : ControllerBase
             var connections = PresenceTracker.GetConnectionsForUser(requestTo.UserName);
             if (connections != null)
             {
-                await _eventHub.Clients.Clients(connections).SendAsync("NewFriendRequest", _mapper.Map<UserDetailsDto>(requestFrom));
+                await _eventHub.Clients.Clients(connections).SendAsync($"{EventTypes.NewFriendRequest}", _mapper.Map<UserDetailsDto>(requestFrom));
             }
             
-            return Ok("Request sent");
+            return Ok(new { StatusCode = 200, Message = "Request sent" });
         }
 
         return BadRequest(new Error(400, "Could not send friend request"));
@@ -99,5 +112,38 @@ public class FriendRequestsController : ControllerBase
         }
 
         return BadRequest(new Error(400, "Could not delete friend request"));
+    }
+    
+    [HttpPost("accept/{requestId}")]
+    public async Task<IActionResult> AcceptFriendRequest(int requestId)
+    {
+        var friendRequest = await _friendRequestRepository.GetRequestsById(requestId);
+        if (friendRequest == null)
+        {
+            return NotFound(new Error(404, "Invalid friend request"));
+        }
+        
+        if (friendRequest.RequestToId != User.GetUserId())
+        {
+            return Unauthorized(new Error(401, "This request was not for you"));
+        }
+
+        var currentUser = await _userRepository.GetUserByUserIdAsync(User.GetUserId());
+        var friendUser = await _userRepository.GetUserByUserIdAsync(friendRequest.RequestFromId);
+        
+        var newfriend = await _friendRepository.AddNewFriend(currentUser, friendUser);
+        if (newfriend == null)
+        {
+            return BadRequest(new Error(400, "Could not add friend"));
+        }
+
+        await _friendRequestRepository.DeleteFriendRequestById(friendRequest.Id);
+        
+        var connections = PresenceTracker.GetConnectionsForUser(friendRequest.RequestFrom.UserName);
+        if (connections != null)
+        {
+            await _eventHub.Clients.Clients(connections).SendAsync($"{EventTypes.FriendRequestAccepted}", _mapper.Map<UserDetailsDto>(friendRequest.RequestFrom));
+        }
+        return Ok(newfriend);
     }
 }

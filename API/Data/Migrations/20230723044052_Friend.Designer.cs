@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230722123501_Messages")]
-    partial class Messages
+    [Migration("20230723044052_Friend")]
+    partial class Friend
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,58 @@ namespace API.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("API.Entities.Friend", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("FriendOneId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FriendTwoId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("FriendsSince")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FriendOneId");
+
+                    b.HasIndex("FriendTwoId");
+
+                    b.ToTable("Friends");
+                });
+
+            modelBuilder.Entity("API.Entities.FriendRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("RequestFromId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RequestToId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestFromId");
+
+                    b.HasIndex("RequestToId");
+
+                    b.ToTable("FriendRequests");
                 });
 
             modelBuilder.Entity("API.Entities.Message", b =>
@@ -85,6 +137,44 @@ namespace API.Data.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("API.Entities.Friend", b =>
+                {
+                    b.HasOne("API.Entities.AppUser", "FriendOne")
+                        .WithMany()
+                        .HasForeignKey("FriendOneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "FriendTwo")
+                        .WithMany()
+                        .HasForeignKey("FriendTwoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FriendOne");
+
+                    b.Navigation("FriendTwo");
+                });
+
+            modelBuilder.Entity("API.Entities.FriendRequest", b =>
+                {
+                    b.HasOne("API.Entities.AppUser", "RequestFrom")
+                        .WithMany()
+                        .HasForeignKey("RequestFromId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "RequestTo")
+                        .WithMany()
+                        .HasForeignKey("RequestToId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RequestFrom");
+
+                    b.Navigation("RequestTo");
                 });
 
             modelBuilder.Entity("API.Entities.Message", b =>

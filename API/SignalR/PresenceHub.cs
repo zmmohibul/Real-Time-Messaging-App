@@ -32,7 +32,7 @@ public class PresenceHub : Hub
     {
         var username = Context.User.FindFirst(ClaimTypes.Name)?.Value;
         var isOffline =  _presenceTracker.UserDisconnected(username, Context.ConnectionId);
-
+        
         if (isOffline)
         {
             await Clients.Others.SendAsync("UserIsOffline", username);

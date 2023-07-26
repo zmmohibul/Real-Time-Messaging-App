@@ -1,6 +1,7 @@
 # Authentication
-# Mohib Token eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJtb2hpYiIsIm5iZiI6MTY5MDA1MzkzOCwiZXhwIjoxNjkwNjU4NzM4LCJpYXQiOjE2OTAwNTM5Mzh9.IkfSxLz6sp2ySVKJO4G_MM1XKu2F7Eed1sPi_Bt1QtgRHwZplfbtMp9f3OMs7MMfN8Up-S5BqOJwK3lQdRFeVA
-# Zahin Token eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwidW5pcXVlX25hbWUiOiJ6YWhpbiIsIm5iZiI6MTY5MDA1Mzk3MSwiZXhwIjoxNjkwNjU4NzcxLCJpYXQiOjE2OTAwNTM5NzF9.XU-Q3SUb6KMB00sRwor2oaXTH_jTYwi2LqSAFGXDEVUWvcATx1mD1ZadnNu4LDsu67D0k3Ipv-R6LLrrGaNBWQ
+
+# Mohib Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJtb2hpYiIsIm5iZiI6MTY5MDA4NzMwMSwiZXhwIjoxNjkwNjkyMTAxLCJpYXQiOjE2OTAwODczMDF9.-FF3x7yEF89Z9RA213aE5xap4FvCKsnKLYUwSiOivPzDfd0vDpKRCWiKNVKfnWTMyP0JoOBaidjYlT_dzvABMA
+# Zahin Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwidW5pcXVlX25hbWUiOiJ6YWhpbiIsIm5iZiI6MTY5MDA4NzMyMCwiZXhwIjoxNjkwNjkyMTIwLCJpYXQiOjE2OTAwODczMjB9.i0bQViYHPLvVkycCrswKRTlvFtw5krTLFVwIrv1wTDYLvwqgmLg4NrgTT5pyEIKFWX3qXFjer4KNV_wdyiV5Sw
 POST http://localhost:5168/api/authentication/register
 Content-Type: application/json
 
@@ -15,15 +16,37 @@ POST http://localhost:5168/api/authentication/login
 Content-Type: application/json
 
 {
-    "userName": "zahin",
+    "userName": "mohib",
     "password": "Pa$$w0rd"
 }
 
 
 ###
 
-# Users
-GET http://localhost:5168/api/users
+# Friend Request
+GET http://localhost:5168/api/friendRequests
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJtb2hpYiIsIm5iZiI6MTY5MDA4NzMwMSwiZXhwIjoxNjkwNjkyMTAxLCJpYXQiOjE2OTAwODczMDF9.-FF3x7yEF89Z9RA213aE5xap4FvCKsnKLYUwSiOivPzDfd0vDpKRCWiKNVKfnWTMyP0JoOBaidjYlT_dzvABMA
+
+###
+
+POST http://localhost:5168/api/friendRequests?requestToUserId=2
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJtb2hpYiIsIm5iZiI6MTY5MDA4NzMwMSwiZXhwIjoxNjkwNjkyMTAxLCJpYXQiOjE2OTAwODczMDF9.-FF3x7yEF89Z9RA213aE5xap4FvCKsnKLYUwSiOivPzDfd0vDpKRCWiKNVKfnWTMyP0JoOBaidjYlT_dzvABMA
+
+###
+
+POST http://localhost:5168/api/friendRequests/accept/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJtb2hpYiIsIm5iZiI6MTY5MDA4NzMwMSwiZXhwIjoxNjkwNjkyMTAxLCJpYXQiOjE2OTAwODczMDF9.-FF3x7yEF89Z9RA213aE5xap4FvCKsnKLYUwSiOivPzDfd0vDpKRCWiKNVKfnWTMyP0JoOBaidjYlT_dzvABMA
+
+###
+
+DELETE  http://localhost:5168/api/friendRequests/4
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJtb2hpYiIsIm5iZiI6MTY5MDA4NzMwMSwiZXhwIjoxNjkwNjkyMTAxLCJpYXQiOjE2OTAwODczMDF9.-FF3x7yEF89Z9RA213aE5xap4FvCKsnKLYUwSiOivPzDfd0vDpKRCWiKNVKfnWTMyP0JoOBaidjYlT_dzvABMA
+
+###
+# Friend
+GET http://localhost:5168/api/friends
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJtb2hpYiIsIm5iZiI6MTY5MDA4NzMwMSwiZXhwIjoxNjkwNjkyMTAxLCJpYXQiOjE2OTAwODczMDF9.-FF3x7yEF89Z9RA213aE5xap4FvCKsnKLYUwSiOivPzDfd0vDpKRCWiKNVKfnWTMyP0JoOBaidjYlT_dzvABMA
+
 
 ###
 

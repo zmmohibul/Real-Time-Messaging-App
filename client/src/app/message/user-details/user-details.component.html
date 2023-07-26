@@ -1,0 +1,24 @@
+<div *ngIf="currentTab && user">
+  <div>{{user.userName}}</div>
+  <button
+    type="button"
+    class="btn btn-dark btn-lg dark-3"
+    mdbRipple
+    rippleColor="dark"
+    (click)="onSendFriendRequestClick(user)"
+    *ngIf="currentTab === ActiveTab.FindFriend"
+  >
+    Send Friend Request
+  </button>
+
+  <button
+    type="button"
+    class="btn btn-dark btn-lg dark-3"
+    mdbRipple
+    rippleColor="dark"
+    (click)="onAcceptFriendRequestClick(user)"
+    *ngIf="currentTab === ActiveTab.FriendRequests"
+  >
+    Accept Friend Request
+  </button>
+</div>

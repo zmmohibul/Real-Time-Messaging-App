@@ -23,17 +23,28 @@ public class UserRepository : IUserRepository
     {
         var query = _dataContext.Users.AsNoTracking();
 
-        if (!string.IsNullOrEmpty(queryParameters.SearchTerm))
-        {
-            query = query.Where(user => user.UserName.Contains(queryParameters.SearchTerm.ToLower()));
-        }
+        return await GetUsersUsingQuerySourceProcessingQueryParameters(query, queryParameters);
+    }
 
-        var projectedQuery = query.ProjectTo<UserDetailsDto>(_mapper.ConfigurationProvider);
+    public async Task<Result<PaginatedList<UserDetailsDto>>> GetAllUsersWhoAreNotFriendOfCurrentUserAsync(int currUserId, QueryParameters queryParameters)
+    {
+        var friendsOfCurrentUser = await _dataContext.Friends
+            .AsNoTracking()
+            .Where(f => f.FriendOneId == currUserId || f.FriendTwoId == currUserId)
+            .Select(f => f.FriendOneId == currUserId ? f.FriendTwoId : f.FriendOneId)
+            .ToListAsync();
 
-        var data = await PaginatedList<UserDetailsDto>.CreatePaginatedListAsync(projectedQuery,
-            queryParameters.PageNumber, queryParameters.PageSize);
+        var currentUsersRequests = await _dataContext.FriendRequests
+            .AsNoTracking()
+            .Where(fr => fr.RequestToId == currUserId || fr.RequestFromId == currUserId)
+            .Select(fr => fr.RequestToId == currUserId ? fr.RequestFromId : fr.RequestToId)
+            .ToListAsync();
 
-        return Result<PaginatedList<UserDetailsDto>>.OkResult(data);
+        var query = _dataContext.Users
+            .AsNoTracking()
+            .Where(user => !friendsOfCurrentUser.Contains(user.Id) && !currentUsersRequests.Contains(user.Id));
+
+        return await GetUsersUsingQuerySourceProcessingQueryParameters(query, queryParameters);
     }
 
     public async Task<AppUser> GetUserByUserNameAsync(string userName)
@@ -82,5 +93,23 @@ public class UserRepository : IUserRepository
         }
         
         return Result<bool>.NoContentResult();
+    }
+
+    public async Task<Result<PaginatedList<UserDetailsDto>>> GetUsersUsingQuerySourceProcessingQueryParameters(
+        IQueryable<AppUser> query, QueryParameters queryParameters)
+    {
+        if (!string.IsNullOrEmpty(queryParameters.SearchTerm))
+        {
+            query = query.Where(user => user.UserName.Contains(queryParameters.SearchTerm.ToLower()));
+        }
+
+        query = query.OrderBy(user => user.UserName);
+        
+        var projectedQuery = query.ProjectTo<UserDetailsDto>(_mapper.ConfigurationProvider);
+        
+        var data = await PaginatedList<UserDetailsDto>.CreatePaginatedListAsync(projectedQuery,
+            queryParameters.PageNumber, queryParameters.PageSize);
+
+        return Result<PaginatedList<UserDetailsDto>>.OkResult(data);
     }
 }

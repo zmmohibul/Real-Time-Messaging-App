@@ -2,16 +2,58 @@
   <div class="row">
     <div class="col-md-4">
       <div class="scroll">
-        <mdb-form-control class="form-white">
-          <input (input)="userSearchInput($event)" mdbInput type="text" id="formWhite" class="form-control"/>
-          <label mdbLabel class="form-label" for="formWhite">Search with UserName <i
-            class="mx-2 fas fa-search"></i></label>
-        </mdb-form-control>
-        <app-user-list [users]="users"></app-user-list>
+
+        <div class="btn-group w-100" role="group">
+          <button
+            type="button"
+            class="btn btn-dark"
+            [ngClass]="{'active': activeTab === ActiveTab.Messages}"
+            (click)="tabButtonGroupClick(ActiveTab.Messages)"
+          >
+            Messages
+          </button>
+          <button
+            type="button"
+            class="btn btn-dark"
+            [ngClass]="{'active': activeTab === ActiveTab.FriendRequests}"
+            (click)="tabButtonGroupClick(ActiveTab.FriendRequests)"
+          >
+            Friend Requests
+          </button>
+          <button
+            type="button"
+            class="btn btn-dark"
+            [ngClass]="{'active': activeTab === ActiveTab.FindFriend}"
+            (click)="tabButtonGroupClick(ActiveTab.FindFriend)"
+          >
+            Find Friend
+          </button>
+        </div>
+
+        <div class="my-2" *ngIf="activeTab === ActiveTab.FindFriend">
+          <mdb-form-control class="form-white">
+            <input (input)="userSearchInput($event)" mdbInput type="text" id="formWhite" class="form-control"/>
+            <label mdbLabel class="form-label" for="formWhite">Search with UserName <i
+              class="mx-2 fas fa-search"></i></label>
+          </mdb-form-control>
+        </div>
+        <app-user-list [users]="users" (userClick)="onUserClick($event)"></app-user-list>
       </div>
     </div>
     <div class="col-md-8">
-      <app-message-thread></app-message-thread>
+      <div *ngIf="activeTab === ActiveTab.Messages">
+        <app-message-thread></app-message-thread>
+      </div>
+      <div *ngIf="activeTab !== ActiveTab.Messages && userInView">
+        <app-user-details
+          [currentTab]="activeTab"
+          [user]="userInView"
+          (sendFriendRequestClick)="onSendFriendRequestClick($event)"
+          (acceptFriendRequestClick)="onAcceptFriendRequestClick($event)"
+        >
+
+        </app-user-details>
+      </div>
     </div>
   </div>
 </div>

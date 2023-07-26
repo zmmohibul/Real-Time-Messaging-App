@@ -24,6 +24,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
+        services.AddScoped<IFriendRepository, FriendRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
 
         services.AddSignalR();
